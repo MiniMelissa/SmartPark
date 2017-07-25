@@ -1,0 +1,6 @@
+framework module Pods_SmartparkUITests {
+  umbrella header "Pods-SmartparkUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
