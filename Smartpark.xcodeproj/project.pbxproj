@@ -43,6 +43,7 @@
 		22F506491E47D40700C90AD7 /* BMark.png in Resources */ = {isa = PBXBuildFile; fileRef = 22F506481E47D40700C90AD7 /* BMark.png */; };
 		384390CDCA177657F0D1350D /* Pods_Smartpark.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C815B4860FC8BBB4B4DA322 /* Pods_Smartpark.framework */; };
 		6DCB68C75FD64E72AD109F05 /* Pods_SmartparkUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E741B5459223C2D136E8A6E0 /* Pods_SmartparkUITests.framework */; };
+		7B3A58781F55F49900B13500 /* SmartMagnetometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B3A58771F55F49900B13500 /* SmartMagnetometer.swift */; };
 		920B94D9A17226DE4A758CD3 /* Pods_termination_projectUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 93AB53F4D43BF95101A357B6 /* Pods_termination_projectUITests.framework */; };
 		AD9A01AA34278168FE7A7FB7 /* Pods_termination_projectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79FFC57EEA37ED6980E197DE /* Pods_termination_projectTests.framework */; };
 /* End PBXBuildFile section */
@@ -110,6 +111,7 @@
 		5FE98316FE98A3FA8DACD881 /* Pods-SmartparkUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SmartparkUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SmartparkUITests/Pods-SmartparkUITests.release.xcconfig"; sourceTree = "<group>"; };
 		680AD877FBB1188D6FAD5FA3 /* Pods-termination_projectUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-termination_projectUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-termination_projectUITests/Pods-termination_projectUITests.release.xcconfig"; sourceTree = "<group>"; };
 		79FFC57EEA37ED6980E197DE /* Pods_termination_projectTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_termination_projectTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B3A58771F55F49900B13500 /* SmartMagnetometer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartMagnetometer.swift; sourceTree = "<group>"; };
 		7C6902ADAFD76319D4BD2CC4 /* Pods_SmartparkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SmartparkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		80B8DF86B9FA219571EE23AC /* Pods-Smartpark.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Smartpark.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Smartpark/Pods-Smartpark.debug.xcconfig"; sourceTree = "<group>"; };
 		832EAC344EC30BF36DEF03A7 /* Pods-termination_projectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-termination_projectTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-termination_projectTests/Pods-termination_projectTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				22E0665B1E9450E500D1CDE0 /* SmartWifi.swift */,
 				22E0665D1E94514600D1CDE0 /* SmartMotionstate.swift */,
 				22E0665F1E9451B700D1CDE0 /* SmartGps.swift */,
+				7B3A58771F55F49900B13500 /* SmartMagnetometer.swift */,
 			);
 			name = "Database Classes";
 			sourceTree = "<group>";
@@ -584,6 +587,7 @@
 				22E0665E1E94514600D1CDE0 /* SmartMotionstate.swift in Sources */,
 				22D1BFA71EA902F200E5FC72 /* MapViewController.swift in Sources */,
 				224F18EA1EB8C0FF003DCE5A /* SmartGPSManager.swift in Sources */,
+				7B3A58781F55F49900B13500 /* SmartMagnetometer.swift in Sources */,
 				224F18EC1EB8C7D2003DCE5A /* SmartMotionStateManager.swift in Sources */,
 				224F18F71EBFEF65003DCE5A /* ETAService.swift in Sources */,
 				22E066581E944FDB00D1CDE0 /* SmartStep.swift in Sources */,

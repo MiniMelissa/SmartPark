@@ -68,6 +68,24 @@ class SmartMotionSensorsManager {
         }
     }
     
+    //meng xu TODO !  search how to get magnetometer sensor value in swift
+    /*
+    func set_magnetometer_sensor(set: Int)->Void{
+        if set == TURN_ON{
+            if DEBUG { print("Set magnetometer sensor")
+                motion_manager.startMagnetometerUpdates(to: OperationQueue.current!{(data,error) in
+                    if let magData = data{
+                        let timestamp = getDateinMilliseconds()
+                        let x = magData.
+                        let y = magData.
+                    }
+                }
+        }
+    }
+ */
+    
+    
+    
     //updates the sampling rate on accel and gyro based on value of UISegmented control selected by user
     func updateSamplingRates(new_rate: Double) -> Void {
         motion_manager.accelerometerUpdateInterval = new_rate

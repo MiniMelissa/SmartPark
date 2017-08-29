@@ -23,6 +23,8 @@ class SensorViewController: UIViewController {
     static var location_switch_is_on: Bool = true
     static var gyro_switch_is_on: Bool = true
     static var accel_switch_is_on: Bool = true
+    //meng xu
+    static var magneto_switch_is_on: Bool = true
     
     
     func schedule_battery_timer() -> Void {
@@ -89,6 +91,13 @@ class SensorViewController: UIViewController {
             if DEBUGPOST {print("gps execute")}
             let gps_data = LocalDB.db_instance.gps_rows_to_json()
             LocalDB.db_instance.post_data(post_data: gps_data, url_p: GPS_URL, url_type: URL_TYPE.GPS)
+        
+            //meng xu
+            if DEBUGPOST {print("magnetometer lock")}
+            mag_sem.wait()
+            if DEBUGPOST {print("magnetometer execute")}
+            let mag_data = LocalDB.db_instance.magneto_rows_to_json()
+            LocalDB.db_instance.post_data(post_data: mag_data, url_p: MAGNETOMETER_URL, url_type: URL_TYPE.MAGNETOMETER)
         }
     }
     
@@ -175,6 +184,22 @@ class SensorViewController: UIViewController {
 
     }
     
+    /*  Meng Xu magnetometer  TODO!!! complete SmartGPSManager first! */
+    @IBOutlet weak var magnetometer_switch:UISwitch!
+    @IBAction func toggle_magneto_sensor(_ sender: Any){
+        if magnetometer_switch.isOn{
+            SensorViewController.magneto_switch_is_on = true
+            if DEBUG { print("magneto switch = \(magnetometer_switch.isOn)")}
+            
+            
+        }else{
+            SensorViewController.magneto_switch_is_on = false
+            
+            if DEBUG { print("magneto switch = \(magnetometer_switch.isOn)")}
+            
+        }
+    }
+    
     @IBOutlet weak var location_switch: UISwitch!
     @IBAction func toggle_location_sensor(_ sender: Any) {
         if location_switch.isOn {
@@ -188,19 +213,7 @@ class SensorViewController: UIViewController {
         }
     }
     
-    /*  Meng Xu magnetometer */
-    @IBOutlet weak var magnetometer_switch:UISwitch!
-    @IBAction func toggle_magneto_sensor(_ sender: Any){
-        if magnetometer_switch.isOn{
-            
-            if DEBUG { print("magneto switch = \(magnetometer_switch.isOn)")}
-        }else{
-            
-            
-            if DEBUG { print("magneto switch = \(magnetometer_switch.isOn)")}
 
-        }
-    }
     
     
     
@@ -208,6 +221,8 @@ class SensorViewController: UIViewController {
         accel_switch.setOn(SensorViewController.accel_switch_is_on, animated: false)
         gyro_switch.setOn(SensorViewController.gyro_switch_is_on, animated: false)
         location_switch.setOn(SensorViewController.location_switch_is_on, animated: false)
+        //meng xu
+        magnetometer_switch.setOn(SensorViewController.magneto_switch_is_on, animated: false)
     }
     
  

@@ -22,6 +22,8 @@ class LocalDB{
     var num_step_rows_posted = 0
     var num_motionstate_rows_posted = 0
     var num_gps_rows_posted = 0
+    //meng xu
+    var num_mag_rows_posted = 0
    
     //Accelerometer Table
     private let accelTable = Table("Accelerometer")
@@ -76,6 +78,17 @@ class LocalDB{
     private let battery_userId = Expression<String>("UserID")
     private let battery_timestamp = Expression<Int64>("Timestamp")
     private let battery_percentage = Expression<Int64>("Percentage")
+    
+    //meng xu
+    //Magnetometer Table
+    private let magnetometerTable = Table("Magnetometer")
+    private let magnetometer_id = Expression<Int64>("Id")
+    private let magnetometer_userId = Expression<String>("UserId")
+    private let magnetometer_timestamp = Expression<Int64>("Timestamp")
+    private let magnetometer_X = Expression<Double>("X")
+    private let magnetometer_Y = Expression<Double>("Y")
+    private let magnetometer_Z = Expression<Double>("Z")
+
 
     private init(){
         let path = NSSearchPathForDirectoriesInDomains(
@@ -100,7 +113,10 @@ class LocalDB{
         createMotionStateTable()
         createGpsTable()
         createBatteryTable()
+        //meng xu
+        createMagnetometerTable()
     }
+    
     
     private func createAccelerometerTable() {
         do {
@@ -198,6 +214,37 @@ class LocalDB{
         }
     }
     
+    
+    //meng xu
+    //create magnetometer table
+    private func createMagnetometerTable(){
+        do {
+            try db!.run(accelTable.create(ifNotExists: true){ table in
+                table.column(magnetometer_id, primaryKey: .autoincrement)
+                table.column(magnetometer_userId)
+                table.column(magnetometer_timestamp)
+                table.column(magnetometer_X)
+                table.column(magnetometer_Y)
+                table.column(magnetometer_Z)
+            })
+        }catch {
+            print("Unable to create magnetometer table")
+        }
+    }
+    
+    //meng xu
+    //insert into magnetometer table
+    func insertMagnetometer(cuserid: String, ctimestamp: Int64, cx: Double, cy: Double, cz: Double)->Int64{
+        do{
+            let insert = magnetometerTable.insert(magnetometer_userId <- cuserid, magnetometer_timestamp <- ctimestamp, magnetometer_X <- cx, magnetometer_Y <- cy, magnetometer_Z <- cz)
+            let id = try db!.run(insert)
+            return id
+        }catch{
+            print(" Magnetometer table insert failed")
+            return -1
+        }
+    }
+    
     func insertAccelerometer(cuserid: String, ctimestamp: Int64, cx: Double, cy: Double, cz: Double) -> Int64?{
         do {
             let insert = accelTable.insert(accel_userId <- cuserid, accel_timestamp <- ctimestamp, accel_x <- cx, accel_y <- cy, accel_z <- cz)
@@ -275,6 +322,60 @@ class LocalDB{
             print("Battery table insert failed")
             return -1
         }
+    }
+    
+    
+    
+    /******************
+     meng xu
+ 
+     Magnetometer JSON methods
+     
+     ***************/
+    
+    //return Rows of Magnetometer Data
+    //called by magneto_rows_to_json
+    private func getMagnetometer(num_rows: Int)->[Row]{
+        let query = magnetometerTable.limit(num_rows).order(magnetometer_id.asc)
+        var row = [Row]()
+        do{
+            row = Array(try db!.prepare(query))
+        }catch{
+            print("none")
+        }
+        return row
+    }
+    
+    //only called by magneto_rows_to_json
+    private func magneto_row_to_dictionary(row:[Row])->[Dictionary<String, AnyObject>]{
+        var magneto_dict: [Dictionary<String, AnyObject>] = []
+        for elem in row{
+            let entry = [
+                "UserID": NSString(string: elem.get(magnetometer_userId)),
+                "Timestamp": NSNumber (value: elem.get(magnetometer_timestamp)),
+                "X": NSNumber(value: elem.get(magnetometer_X)),
+                "Y": NSNumber(value: elem.get(magnetometer_Y)),
+                "Z": NSNumber(value: elem.get(magnetometer_Z))
+            ]
+            magneto_dict.append(entry)
+        }
+        return magneto_dict
+    }
+    
+    func magneto_rows_to_json()->Data{
+        let row = getMagnetometer(num_rows: NUM_ROWS_FOR_QUERY)
+        let magneto_dict = magneto_row_to_dictionary(row: row)
+        var magneto_json: Data?
+        do{
+            magneto_json = try JSONSerialization.data(withJSONObject: magneto_dict, options: .prettyPrinted)
+        }catch{
+            print("json went wrong")
+        }
+        num_mag_rows_posted = row.count
+        if DEBUG {
+            print("magnetometer rows posted =\(num_mag_rows_posted)")
+        }
+        return magneto_json!
     }
     
     /***************************************************************************************************
@@ -641,6 +742,11 @@ class LocalDB{
                 if DEBUG {print("Signal motionstate")}
                 motionstate_sem.signal()
                 break
+            //meng xu
+            case URL_TYPE.MAGNETOMETER:
+                if upload_success {delete_rows_mag()}
+                if DEBUG {print("Signal magnetometer")}
+                break
             default:
                 break
         }
@@ -684,6 +790,36 @@ class LocalDB{
         task.resume()
     }
     
+    //meng xu
+    func delete_rows_mag(){
+        var min: Int64 = -1
+        do{
+            let count = try db!.scalar(magnetometerTable.count)
+            print("Magnetometer old count is \(count)")
+            if count != 0 {
+                min = try db!.scalar(magnetometerTable.select(magnetometer_id.min))!
+            }else{
+                return
+            }
+        }catch{
+            print("error")
+
+        }
+        
+        let new_min_row = min + num_mag_rows_posted
+        if DEBUG { print("Magnetometer min = \(min) and magnetometer new_min_row = \(new_min_row)")}
+        let query = magnetometerTable.filter(magnetometer_id < new_min_row)
+        do{
+            try db!.run(query.delete())
+            var count = try db!.scalar(magnetometerTable.count)
+            print("Magnetometer new count is \(count)")
+
+        }catch{
+            print("error deleting magnetometer. Error=\(error)")
+
+        }
+        
+    }
     
     func delete_rows_accel() {
         var min: Int64 = -1

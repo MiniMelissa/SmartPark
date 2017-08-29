@@ -26,6 +26,8 @@ struct URL_TYPE {
     static let STEP: Int = 4
     static let WIFI: Int = 5
     static let MOTIONSTATE: Int = 6
+    //meng xu
+    static let MAGNETOMETER: Int = 7
 }
 
 
@@ -48,6 +50,8 @@ let BATTERY_URL: String = "\(SMARTPARK_BASE_URL)battery.php"
 let STEP_URL: String = "\(SMARTPARK_BASE_URL)step.php"
 let WIFI_URL: String = "\(SMARTPARK_BASE_URL)wifi.php"
 let MOTIONSTATE_URL: String = "\(SMARTPARK_BASE_URL)motionstate.php"
+//meng xu
+let MAGNETOMETER_URL: String="\(SMARTPARK_BASE_URL)magnetometer.php"
 
 
 
@@ -72,6 +76,8 @@ var wifi_sem = DispatchSemaphore(value: 1)
 var gps_sem = DispatchSemaphore(value: 1)
 var motionstate_sem = DispatchSemaphore(value: 1)
 var step_sem = DispatchSemaphore(value: 1)
+//meng xu
+var mag_sem = DispatchSemaphore(value: 1)
 
 let SEM_WAIT_INTERVAL = DispatchTime.now() + DispatchTimeInterval.seconds(60)
 
