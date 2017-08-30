@@ -184,22 +184,6 @@ class SensorViewController: UIViewController {
 
     }
     
-    /*  Meng Xu magnetometer  TODO!!! complete SmartGPSManager first! */
-    @IBOutlet weak var magnetometer_switch:UISwitch!
-    @IBAction func toggle_magneto_sensor(_ sender: Any){
-        if magnetometer_switch.isOn{
-            SensorViewController.magneto_switch_is_on = true
-            if DEBUG { print("magneto switch = \(magnetometer_switch.isOn)")}
-            
-            
-        }else{
-            SensorViewController.magneto_switch_is_on = false
-            
-            if DEBUG { print("magneto switch = \(magnetometer_switch.isOn)")}
-            
-        }
-    }
-    
     @IBOutlet weak var location_switch: UISwitch!
     @IBAction func toggle_location_sensor(_ sender: Any) {
         if location_switch.isOn {
@@ -213,8 +197,21 @@ class SensorViewController: UIViewController {
         }
     }
     
-
     
+    /*  Meng Xu magnetometer  complete SmartGPSManager first! */
+    @IBOutlet weak var magnetometer_switch:UISwitch!
+    @IBAction func toggle_magneto_sensor(_ sender: Any){
+        if magnetometer_switch.isOn{
+            SensorViewController.magneto_switch_is_on = true
+            SmartMotionSensorsManager.motion_sensors_instance.set_magnetometer_sensor(set: TURN_ON)
+            if DEBUG { print("magneto switch = \(magnetometer_switch.isOn)")}
+            
+        }else{
+            SensorViewController.magneto_switch_is_on = false
+            SmartMotionSensorsManager.motion_sensors_instance.set_magnetometer_sensor(set: TURN_OFF)
+            if DEBUG { print("magneto switch = \(magnetometer_switch.isOn)")}
+        }
+    }
     
     
     func set_switch_statuses(){

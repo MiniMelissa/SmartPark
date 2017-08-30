@@ -219,7 +219,7 @@ class LocalDB{
     //create magnetometer table
     private func createMagnetometerTable(){
         do {
-            try db!.run(accelTable.create(ifNotExists: true){ table in
+            try db!.run(magnetometerTable.create(ifNotExists: true){ table in
                 table.column(magnetometer_id, primaryKey: .autoincrement)
                 table.column(magnetometer_userId)
                 table.column(magnetometer_timestamp)

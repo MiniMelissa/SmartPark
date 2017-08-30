@@ -27,8 +27,10 @@ class SmartMotionSensorsManager {
     private func configureMotionManager() -> Void {
         motion_manager.accelerometerUpdateInterval = DEFAULT_SAMPLING_RATE
         motion_manager.gyroUpdateInterval = DEFAULT_SAMPLING_RATE
+        motion_manager.magnetometerUpdateInterval = DEFAULT_SAMPLING_RATE //meng xu
         set_accel_sensor(set: TURN_ON)
         set_gyro_sensor(set: TURN_ON)
+        set_magnetometer_sensor(set: TURN_ON) //meng xu
     }
     
     func set_accel_sensor(set: Int) -> Void {
@@ -68,28 +70,31 @@ class SmartMotionSensorsManager {
         }
     }
     
-    //meng xu TODO !  search how to get magnetometer sensor value in swift
-    /*
+    //meng xu   search how to get magnetometer sensor value in swift
     func set_magnetometer_sensor(set: Int)->Void{
         if set == TURN_ON{
-            if DEBUG { print("Set magnetometer sensor")
-                motion_manager.startMagnetometerUpdates(to: OperationQueue.current!{(data,error) in
+            if DEBUG { print("Set magnetometer sensor")}
+                motion_manager.startMagnetometerUpdates(to: OperationQueue.current!) {(data,error) in
                     if let magData = data{
                         let timestamp = getDateinMilliseconds()
-                        let x = magData.
-                        let y = magData.
+                        let x = magData.magneticField.x
+                        let y = magData.magneticField.y
+                        let z = magData.magneticField.z
+                        _ = LocalDB.db_instance.insertMagnetometer(cuserid: USER_ID, ctimestamp: timestamp, cx: x, cy: y, cz: z)
                     }
                 }
-        }
+            }else {
+                if DEBUG { print("stop magnetometer sensor")}
+                motion_manager.stopMagnetometerUpdates()
+            }
     }
- */
+ 
     
-    
-    
-    //updates the sampling rate on accel and gyro based on value of UISegmented control selected by user
+    //updates the sampling rate on accel , gyro and magnetometer based on value of UISegmented control selected by user
     func updateSamplingRates(new_rate: Double) -> Void {
         motion_manager.accelerometerUpdateInterval = new_rate
         motion_manager.gyroUpdateInterval = new_rate
+        motion_manager.magnetometerUpdateInterval = new_rate
     }
 
 
