@@ -39,7 +39,11 @@ class SmartGPSManager: NSObject, CLLocationManagerDelegate {
         let long = location.coordinate.longitude
         let lat = location.coordinate.latitude
         let timestamp = getDateinMilliseconds()
-        _ = LocalDB.db_instance.insertGPS(cuserid: USER_ID, ctimestamp: timestamp, clatitude: lat, clongitude: long)
+        //meng xu , fake data for testing
+        let bearing = location.course
+        let speed = location.speed
+        let flag = 1
+        _ = LocalDB.db_instance.insertGPS(cuserid: USER_ID, ctimestamp: timestamp, clatitude: lat, clongitude: long,cbearing: bearing, cspeed: speed, cflag: flag)
         if DEBUG {print("In GPSManager locationManager method")}
     }
     

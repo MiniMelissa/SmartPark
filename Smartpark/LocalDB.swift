@@ -71,6 +71,10 @@ class LocalDB{
     private let gps_timestamp = Expression<Int64>("Timestamp")
     private let gps_latitude = Expression<Double>("Latitude")
     private let gps_longitude = Expression<Double>("Longitude")
+    //meng xu
+    private let gps_bearing = Expression<Double>("Bearing")
+    private let gps_speed = Expression<Double> ("Speed")
+    private let gps_flag = Expression<Int> ("Flag")
     
     //Battery Table
     private let batteryTable = Table("Battery")
@@ -195,6 +199,10 @@ class LocalDB{
                 table.column(gps_timestamp)
                 table.column(gps_latitude)
                 table.column(gps_longitude)
+                //meng xu
+                table.column(gps_bearing)
+                table.column(gps_speed)
+                table.column(gps_flag)
             })
         } catch {
             print("Unable to create GPS table")
@@ -302,13 +310,15 @@ class LocalDB{
         }
     }
     
-    func insertGPS(cuserid: String, ctimestamp: Int64, clatitude: Double, clongitude: Double) -> Int64?{
+    //meng xu ,add bearing,speed,flag
+    func insertGPS(cuserid: String, ctimestamp: Int64, clatitude: Double, clongitude: Double, cbearing: Double, cspeed:Double, cflag:Int) -> Int64?{
         do {
-            let insert = gpsTable.insert(gps_userId <- cuserid, gps_timestamp <- ctimestamp, gps_latitude <- clatitude, gps_longitude <- clongitude)
+            let insert = gpsTable.insert(gps_userId <- cuserid, gps_timestamp <- ctimestamp, gps_latitude <- clatitude, gps_longitude <- clongitude, gps_bearing <- cbearing, gps_speed <- cspeed, gps_flag <- cflag)
             let id = try db!.run(insert)
             return id
         } catch{
             print("GPS table insert failed")
+            print("Error info: \(error)")
             return -1
         }
     }
@@ -504,7 +514,11 @@ class LocalDB{
                 "UserID": NSString(string: elem.get(gps_userId)),
                 "Timestamp": NSNumber(value: elem.get(gps_timestamp)),
                 "Latitude": NSNumber(value: elem.get(gps_latitude)),
-                "Longitude": NSNumber(value: elem.get(gps_longitude))
+                "Longitude": NSNumber(value: elem.get(gps_longitude)),
+                //meng xu , add bearing,speed,flag
+                "Bearing": NSNumber(value: elem.get(gps_bearing)),
+                "Speed": NSNumber(value: elem.get(gps_speed)),
+                "Flag": NSNumber(value: elem.get(gps_flag))
             ]
             gps_dict.append(entry)
         }
@@ -746,6 +760,7 @@ class LocalDB{
             case URL_TYPE.MAGNETOMETER:
                 if upload_success {delete_rows_mag()}
                 if DEBUG {print("Signal magnetometer")}
+                mag_sem.signal()
                 break
             default:
                 break

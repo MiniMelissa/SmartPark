@@ -74,19 +74,19 @@ class SmartMotionSensorsManager {
     func set_magnetometer_sensor(set: Int)->Void{
         if set == TURN_ON{
             if DEBUG { print("Set magnetometer sensor")}
-                motion_manager.startMagnetometerUpdates(to: OperationQueue.current!) {(data,error) in
-                    if let magData = data{
+            motion_manager.startMagnetometerUpdates(to: OperationQueue.current!) {(data,error) in
+                if let magData = data{
                         let timestamp = getDateinMilliseconds()
                         let x = magData.magneticField.x
                         let y = magData.magneticField.y
                         let z = magData.magneticField.z
                         _ = LocalDB.db_instance.insertMagnetometer(cuserid: USER_ID, ctimestamp: timestamp, cx: x, cy: y, cz: z)
-                    }
                 }
-            }else {
-                if DEBUG { print("stop magnetometer sensor")}
-                motion_manager.stopMagnetometerUpdates()
             }
+        }else {
+            if DEBUG { print("stop magnetometer sensor")}
+            motion_manager.stopMagnetometerUpdates()
+        }
     }
  
     
